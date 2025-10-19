@@ -12,7 +12,7 @@
     "doctrine/doctrine-bundle": "^2.14",
     "doctrine/doctrine-fixtures-bundle": "^4.1",
     "doctrine/doctrine-migrations-bundle": "^3.4",
-    "doctrine/orm": "^3.3",
+    "doctrine/orm": "^3.5",
     "lexik/jwt-authentication-bundle": "^3.1",
     "nelmio/api-doc-bundle": "^5.3",
     "nelmio/cors-bundle": "^2.5",
@@ -27,6 +27,7 @@
     "symfony/framework-bundle": "7.3.*",
     "symfony/http-foundation": "7.3.*",
     "symfony/intl": "7.3.*",
+    "symfony/password-hasher": "7.3.*",
     "symfony/property-access": "7.3.*",
     "symfony/property-info": "7.3.*",
     "symfony/routing": "7.3.*",
@@ -83,5 +84,8 @@
       "allow-contrib": false,
       "require": "7.3.*"
     }
+  },
+  "require-dev": {
+    "symfony/maker-bundle": "^1.64"
   }
 }

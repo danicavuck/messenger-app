@@ -16,7 +16,7 @@ Development Commands
 
 Build and start containers:
 ```bash
-docker compose -f docker-compose.yml up --build
+  docker compose -f docker-compose.yml up --build
 ```
 
 Access backend in browser:
@@ -24,7 +24,7 @@ http://localhost:8080
 
 Access PHP container:
 ```bash
-docker exec -it messenger-backend bash
+  docker exec -it messenger-backend bash
 ```
 
 Access PostgreSQL:
@@ -36,27 +36,30 @@ Database: messenger_db
 
 Run Symfony commands inside container:
 ```bash
-php bin/console doctrine:database:create
+  docker exec -it messenger-backend php bin/console doctrine:database:create
 ```
+
+Execute project migrations
 ```bash
-php bin/console doctrine:migrations:migrate
+  docker exec -it messenger-backend php bin/console doctrine:migrations:migrate
 ```
+Clear cache
 ```bash
-php bin/console cache:clear`
+  docker exec -it messenger-backend php bin/console cache:clear
 ```
 
 
 Stop containers:
 ```bash
-docker compose -f docker-compose.yml down`
+   docker compose -f docker-compose.yml down
 ```
 
 Full reset (remove database volume):
 ```bash
-docker compose -f docker-compose.dev.yml down -v`
+  docker compose -f docker-compose.dev.yml down -v
 ```
 
 Generate JWT keys
 ```shell
-$ docker exec -it messenger-backend ../bin/console lexik:jwt:generate-keypair
+  docker exec -it messenger-backend php bin/console lexik:jwt:generate-keypair
 ```

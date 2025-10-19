@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "37eb567d-4666-4d67-aabf-8619683f1bc4",
+		"name": "Messenger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9571743"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"user@gmail.com\",\n    \"password\":\"user123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/api/v1/auth/register",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"pm.environment.set(\"access_token\", jsonData.data.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+									"pm.collectionVariables.get(\"variable_key\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"demo@example.com\",\n    \"password\":\"demo1234\"\n}"
+						},
+						"url": {
+							"raw": "{{api_host}}/api/v1/auth/login",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "REFRESH TOKEN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"pm.environment.set(\"access_token\", jsonData.data.access_token);",
+									"pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NjA4OTMxMTMsImV4cCI6MTc2MzQ4NTExMywicm9sZXMiOlsiUk9MRV9VU0VSIl0sInR5cGUiOiJyZWZyZXNoIiwidXNlcm5hbWUiOiJkZW1vQGV4YW1wbGUuY29tIn0.lpVfX3BN4rLcGG48pidtDXKPLPqMWNF4NUWlBHoaXyQ9g_Y7mlOHatGtDvajEuXncmoOt-kjYnk5Dm0-4pXlhuammjZv_zQAK0LMJ6sAxMcZ4ZJW-16Kh6VEEqHt70fEpSoNUa_Ilcork0-VaAczRpyNnr-6jXYbjo5HANN-a02dMPdVdS-miAjTjQ1R0SK7OaDVjOKzv5dSWwYaFUsOtNTp0QtjNjhoo4WecL-K3SbHyRxO-iSHwIqt6JaGttJiWH1CBsjm6X7yP4Re1toEijPBuahAJgexh0IfrM2jSOjrOPMRx_NUSJELkrRc0_a93pAJHVWCIavMBArPv7VM0kbYb39u3eyix--KZwC5C-55qJum4fv-xxP3WcT7OCUZu8zpkIGTvtXfiTeGyW5YQGL3Li_BNpIKDPW5cyY6xmp6SWKF0xce8BB0zNTFoAraOE9TFbwMfZG3A99g8eWAU1S1aqkDtGzDTe7X1TbcVui_N0cHKN-rRJEVeK01zLiBPj8aCqMTMjXTlKTu0L1h-Q8-mmwtkpH5xRH4utHtJBATL96TAWRfe0Av_q-rEv-Q-pKuyrEx_W71FiXcxDb4WJWw1X0o16zrZJ3LB6rfqgZ3GvSPm-dbLVCyaFac5fbfBq1t2FWMx39MAMsQtiZPaTNBViSyxuUKSLG_3to5cgA\"\n}"
+						},
+						"url": {
+							"raw": "{{api_host}}/api/v1/auth/refresh",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh"
+							],
+							"query": [
+								{
+									"key": "Authorization",
+									"value": "{{access_token}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -6,33 +6,34 @@ security:
     app_user_provider:
       entity:
         class: App\Entity\User
-        property: email
+        property: username
 
   firewalls:
-    # Login endpoint: issues JWT on success via Lexik handlers
-    login:
-      pattern: ^/auth/login$
-      stateless: true
-      provider: app_user_provider
-      json_login:
-        check_path: /auth/login
-        username_path: email
-        password_path: password
-        success_handler: lexik_jwt_authentication.handler.authentication_success
-        failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-    # Protect everything under /api with JWT
-    api:
-      pattern: ^/api
-      stateless: true
-      provider: app_user_provider
-      jwt: ~   # provided by Lexik
-
+    # Symfony profiler, assets, etc.
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
 
+    # Public authentication endpoints (login/register/refresh)
+    auth:
+      pattern: ^/api/v1/auth/
+      stateless: true
+      provider: app_user_provider
+      security: false   # Explicitly allow anonymous access for auth routes
+
+    # Main API firewall using JWT authentication
+    api:
+      pattern: ^/api/
+      stateless: true
+      provider: app_user_provider
+      jwt: ~            # Provided by LexikJWTAuthenticationBundle
+
   access_control:
-    - { path: ^/auth/login$, roles: PUBLIC_ACCESS }
     - { path: ^/api/v1/health$, roles: PUBLIC_ACCESS }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+
+    - { path: ^/api/v1/auth, roles: PUBLIC_ACCESS }
+
+    - { path: ^/api/v1/message, roles: ROLE_USER }
+    - { path: ^/api/v1/messages, roles: ROLE_USER }
+
+    - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }

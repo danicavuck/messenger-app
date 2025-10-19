@@ -8,6 +8,8 @@ services:
       - ./backend/.env
     volumes:
       - ./backend:/var/www/html:cached
+      - ./backend/config/jwt:/var/www/html/config/jwt
+
     ports:
       - "${SERVER_PORT:-8080}:80"
     depends_on:
