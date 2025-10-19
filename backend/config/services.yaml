@@ -1,0 +1,24 @@
+parameters:
+  postgres.url: 'postgresql://%env(POSTGRES_USER)%:%env(POSTGRES_PASSWORD)%@%env(POSTGRES_HOST)%:%env(POSTGRES_PORT)%/%env(POSTGRES_DATABASE)%?serverVersion=%env(POSTGRES_SERVER_VERSION)%&charset=utf8'
+
+  # JWT
+  jwt.access_token_ttl: 3600
+  jwt.refresh_token_ttl: 2592000
+  jwt.secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+  jwt.public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+  jwt.pass_phrase: '%env(JWT_PASSPHRASE)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{Entity,Migrations,Tests}'
+
+
+  App\Controller\:
+    resource: '../src/Controller/*'
+    tags: ['controller.service_arguments']

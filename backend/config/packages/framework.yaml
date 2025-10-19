@@ -1,0 +1,45 @@
+framework:
+  secret: '%env(APP_SECRET)%'
+
+  # --- Request / Response handling ---
+  http_method_override: false
+  handle_all_throwables: true
+
+  # --- Stateless API: No sessions, no CSRF ---
+  session:
+    enabled: false
+  csrf_protection: false
+
+  # --- Routing ---
+  router:
+    utf8: true
+    default_uri: '%env(resolve:APP_URL)%'
+
+  # --- PHP Error Handling ---
+  php_errors:
+    log: true
+    throw: false
+
+  # --- Serializer ---
+  serializer:
+    enable_attributes: true
+
+  # --- Cache ---
+  cache:
+    app: cache.adapter.filesystem
+    system: cache.adapter.system
+    pools:
+      cache.validator:
+        adapter: cache.adapter.filesystem
+      cache.serializer:
+        adapter: cache.adapter.filesystem
+
+  # --- Translator (optional if using i18n) ---
+  translator:
+    default_path: '%kernel.project_dir%/translations'
+    fallbacks: ['en']
+
+when@dev:
+  framework:
+    profiler:
+      only_exceptions: false

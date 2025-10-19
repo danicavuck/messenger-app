@@ -27,7 +27,6 @@
 /backend/var/sessions/
 /tmp/
 /logs/
-/coverage/
 
 # =====================================
 # NELMIO / SWAGGER GENERATED DOCS & UI FILES

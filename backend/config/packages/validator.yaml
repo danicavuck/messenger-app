@@ -1,0 +1,8 @@
+framework:
+  validation:
+    enabled: true
+    enable_attributes: true
+    auto_mapping:
+      App\Entity\: []
+      App\DTO\: []
+    not_compromised_password: true
