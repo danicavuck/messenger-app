@@ -1,0 +1,86 @@
+<div class="max-w-sm mx-auto mt-8 p-6 border rounded bg-white shadow relative overflow-hidden">
+  <h2 class="text-xl font-semibold mb-4 text-center">Login</h2>
+
+  @if (successMessage()) {
+    <div class="toast fixed-message bg-green-100 text-green-800 border border-green-300">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="toast fixed-message bg-red-100 text-red-800 border border-red-300">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onLogin()">
+    <!-- EMAIL -->
+    <label class="block font-medium mb-1">Email</label>
+    <input
+      formControlName="email"
+      type="email"
+      placeholder="Email"
+      class="block w-full border p-2 rounded mb-1"
+    />
+    @if (email.invalid && (email.dirty || email.touched)) {
+      <div class="text-red-500 text-sm mb-3">
+        @if (email.errors?.['required']) {
+          <span>Email is required.</span>
+        }
+        @if (email.errors?.['email']) {
+          <span>Invalid email format.</span>
+        }
+      </div>
+    }
+
+    <!-- PASSWORD -->
+    <label class="block font-medium mb-1">Password</label>
+    <div class="relative mb-1">
+      <input
+        formControlName="password"
+        [type]="showPassword() ? 'text' : 'password'"
+        placeholder="Password"
+        class="block w-full border p-2 rounded pr-10"
+      />
+
+      <button
+        type="button"
+        (click)="togglePassword()"
+        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-600"
+        aria-label="Toggle password visibility"
+      >
+        @if (showPassword()) {
+          👁️‍🗨️ Hide
+        } @else {
+          👁 Show
+        }
+      </button>
+    </div>
+
+    @if (password.invalid && (password.dirty || password.touched)) {
+      <div class="text-red-500 text-sm mb-3">
+        @if (password.errors?.['required']) {
+          <span>Password is required.</span>
+        }
+        @if (password.errors?.['minlength']) {
+          <span>Must be at least 8 characters.</span>
+        }
+      </div>
+    }
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 mt-3 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+      [disabled]="form.invalid || loading()"
+    >
+      {{ loading() ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
+
+  <!-- Switch to Register -->
+  <p class="text-center text-sm mt-4 text-gray-600">
+    Don’t have an account?
+    <a routerLink="/register" class="text-blue-600 hover:underline cursor-pointer">Register</a>
+  </p>
+</div>

@@ -1,0 +1,28 @@
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.toast {
+  position: absolute;
+  bottom: 17rem;
+  right: 4rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  min-width: 70%;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  animation: fade-in 0.25s ease-out;
+  z-index: 20;
+}
+
+.fixed-message {
+  pointer-events: none;
+}

@@ -1,0 +1,108 @@
+<div class="max-w-sm mx-auto mt-8 p-6 border rounded bg-white shadow relative">
+  <h2 class="text-xl font-semibold mb-4 text-center">Register</h2>
+
+  @if (successMessage()) {
+    <div class="toast fixed-message bg-green-100 text-green-800 border border-green-300">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="toast fixed-message bg-red-100 text-red-800 border border-red-300">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onRegister()">
+    <!-- Email -->
+    <div class="mb-3">
+      <label class="block font-medium mb-1">Email</label>
+      <input
+        type="email"
+        placeholder="Email"
+        class="block w-full border p-2 rounded"
+        formControlName="email"
+      />
+
+      @if (email.touched && email.invalid) {
+        <div class="text-red-600 text-sm mt-1">
+          @if (email.errors?.['required']) {
+            <span>Email is required.</span>
+          }
+          @if (email.errors?.['email']) {
+            <span>Invalid email format.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Username -->
+    <div class="mb-3">
+      <label class="block font-medium mb-1">Username</label>
+      <input
+        type="text"
+        placeholder="Username"
+        class="block w-full border p-2 rounded"
+        formControlName="username"
+      />
+      @if (username.touched && username.invalid) {
+        <div class="text-red-500 text-sm mt-1">
+          @if (username.errors?.['required']) {
+            <span>Username is required.</span>
+          }
+          @if (username.errors?.['minlength']) {
+            <span> Username must be at least 3 characters long.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Password -->
+    <label class="block font-medium mb-1">Password</label>
+    <div class="relative mb-1">
+      <input
+        [type]="showPassword() ? 'text' : 'password'"
+        placeholder="Password (min. 8 characters)"
+        class="block w-full border p-2 rounded"
+        formControlName="password"
+      />
+
+      <button
+        type="button"
+        (click)="togglePassword()"
+        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-600"
+        aria-label="Toggle password visibility"
+      >
+        @if (showPassword()) {
+          👁️‍🗨️ Hide
+        } @else {
+          👁 Show
+        }
+      </button>
+    </div>
+    @if (password.touched && password.invalid) {
+      <div class="text-red-500 text-sm mb-3">
+        @if (password.errors?.['required']) {
+          <span>Password is required.</span>
+        }
+        @if (password.errors?.['minlength']) {
+          <span>
+                    Password must be at least 8 characters.
+                </span>
+        }
+      </div>
+    }
+
+    <!-- Submit -->
+    <button
+      class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 mt-3 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+      [disabled]="form.invalid || isSubmitting()"
+    >
+      {{ isSubmitting() ? 'Registering...' : 'Register' }}
+    </button>
+
+    <p class="text-center text-sm mt-4 text-gray-600">
+      <a routerLink="/login" class="text-blue-600 hover:underline cursor-pointer">Go back to login</a>
+    </p>
+  </form>
+</div>
