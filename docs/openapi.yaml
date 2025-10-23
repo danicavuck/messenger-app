@@ -3,7 +3,8 @@ info:
   title: Chat Messenger API
   version: 1.0.0
   description: |
-    REST API for the Chat Messenger application with JWT authentication and token refresh flow.
+    REST API for the Chat Messenger application built with Symfony and Mercure.
+    Provides JWT authentication, refresh tokens, and real-time message updates.
 
 servers:
   - url: http://localhost:8080
@@ -19,23 +20,18 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [email, password, username]
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: demo@example.com
-                username:
-                  type: string
-                  example: demo
-                password:
-                  type: string
-                  format: password
-                  example: demo1234
+              $ref: '#/components/schemas/RegisterUserRequest'
       responses:
         '201':
           description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
         '400':
           description: Validation error or user already exists
 
@@ -48,93 +44,62 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [email, password]
-              properties:
-                email:
-                  type: string
-                  example: demo@example.com
-                password:
-                  type: string
-                  example: demo1234
+              $ref: '#/components/schemas/LoginUserRequest'
       responses:
         '200':
           description: Successful authentication
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                    description: Short-lived JWT access token
-                  refresh_token:
-                    type: string
-                    description: Long-lived JWT refresh token
-                  user:
-                    type: object
-                    properties:
-                      email:
-                        type: string
-                        example: demo@example.com
-                      username:
-                        type: string
-                        example: demo
-                      roles:
-                        type: array
-                        items:
-                          type: string
-                          example: ROLE_USER
+                $ref: '#/components/schemas/AuthResponse'
         '401':
           description: Invalid credentials
 
   /api/v1/auth/refresh:
     post:
-      summary: Refresh access token using a valid refresh token
-      description: |
-        Requires a valid **access token** in the `Authorization` header (auto-filled from Swagger UI “Authorize” button)
-        and a **refresh token** in the request body.
+      summary: Refresh access token using refresh token
       tags: [Authentication]
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required: [refresh_token]
-              properties:
-                refresh_token:
-                  type: string
-                  description: Refresh JWT token
-                  example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...
+              $ref: '#/components/schemas/RefreshTokenRequest'
       responses:
         '200':
-          description: New access and refresh tokens issued
+          description: Tokens refreshed successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                    description: New JWT access token
-                  refresh_token:
-                    type: string
-                    description: New JWT refresh token
+                $ref: '#/components/schemas/AuthResponse'
         '400':
           description: Invalid or expired refresh token
         '401':
-          description: Unauthorized (invalid access token)
+          description: Unauthorized — invalid access token
+
+  /api/v1/users/me:
+    get:
+      summary: Get current authenticated user
+      tags: [User]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized — missing or invalid token
 
   /api/v1/messages:
     get:
-      summary: Get all messages for the authenticated user
-      description: Returns a list of messages belonging to the currently authenticated user.
-      tags: [ Messages ]
+      summary: Get all messages
+      description: Returns all messages belonging to the authenticated user.
+      tags: [Messages]
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       responses:
         '200':
           description: List of messages
@@ -143,61 +108,33 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                      example: Hello world
-                    user:
-                      type: string
-                      example: demo@example.com
-                    timestamp:
-                      type: string
-                      format: date-time
-                      example: 2025-10-19T15:42:00Z
+                  $ref: '#/components/schemas/MessageResponse'
         '401':
-          description: Unauthorized — JWT token missing or invalid
+          description: Unauthorized — missing or invalid token
 
     post:
       summary: Send a new message
       description: Creates and sends a message from the authenticated user.
-      tags: [ Messages ]
+      tags: [Messages]
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - content
-              properties:
-                content:
-                  type: string
-                  example: Hello world
+              $ref: '#/components/schemas/MessageDTO'
       responses:
         '201':
           description: Message created successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Hello world
-                  user:
-                    type: string
-                    example: demo@example.com
-                  timestamp:
-                    type: string
-                    format: date-time
-                    example: 2025-10-19T15:42:00Z
+                $ref: '#/components/schemas/MessageResponse'
         '400':
           description: Invalid message data
         '401':
-          description: Unauthorized — JWT token missing or invalid
+          description: Unauthorized — missing or invalid token
 
 components:
   securitySchemes:
@@ -205,3 +142,98 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required: [email, password, username]
+      properties:
+        email:
+          type: string
+          format: email
+          example: demo@example.com
+        password:
+          type: string
+          minLength: 8
+          example: demo1234
+        username:
+          type: string
+          example: demo
+
+    LoginUserRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: demo@example.com
+        password:
+          type: string
+          example: demo1234
+
+    RefreshTokenRequest:
+      type: object
+      required: [refresh_token]
+      properties:
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJSUzI1NiJ9...
+
+    MessageDTO:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+          maxLength: 2000
+          example: Hello world
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: Short-lived JWT access token
+        refresh_token:
+          type: string
+          description: Long-lived JWT refresh token
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: demo@example.com
+        username:
+          type: string
+          example: demo
+        roles:
+          type: array
+          items:
+            type: string
+            example: ROLE_USER
+
+    MessageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        content:
+          type: string
+          example: Hello, this is a message
+        status:
+          type: string
+          example: SENT
+        created_at:
+          type: string
+          format: date-time
+          example: 2025-10-23T19:45:00Z
+        user:
+          $ref: '#/components/schemas/UserResponse'

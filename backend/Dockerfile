@@ -35,7 +35,7 @@ ENV APP_ENV=dev \
 WORKDIR /var/www/html
 
 # Copy only composer files first (for layer caching)
-COPY backend/composer.json backend/composer.lock ./
+COPY backend/composer.json ./
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 

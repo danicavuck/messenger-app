@@ -84,7 +84,6 @@ backend/public/**/*.map
 # =====================================
 # COMPOSER / PHP
 # =====================================
-composer.lock
 phpunit.xml
 phpunit.xml.dist
 

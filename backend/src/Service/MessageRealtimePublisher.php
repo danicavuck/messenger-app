@@ -9,12 +9,11 @@ use Symfony\Component\Mercure\Update;
 final readonly class MessageRealtimePublisher {
   public function __construct(private HubInterface $hub) {}
 
-  public function publish(Message $message): void
-  {
+  public function publish(Message $message): void {
     $data = [
       'id'         => $message->getId(),
       'content'    => $message->getContent(),
-      'status'     => $message->getStatus()->value,
+      'status'     => $message->getStatus(),
       'isBot'      => $message->isBot(),
       'created_at' => $message->getCreatedAt()->format(DATE_ATOM),
       'user'       => [
