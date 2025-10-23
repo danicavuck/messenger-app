@@ -23,6 +23,9 @@ framework:
   # --- Serializer ---
   serializer:
     enable_attributes: true
+    default_context:
+      datetime_format: 'Y-m-d\TH:i:s\Z'
+      datetime_timezone: 'UTC'
 
   # --- Cache ---
   cache:

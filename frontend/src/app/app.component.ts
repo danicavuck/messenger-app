@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterOutlet} from "@angular/router";
 
 @Component({
@@ -6,7 +6,7 @@ import {RouterOutlet} from "@angular/router";
   standalone: true,
   imports: [RouterOutlet],
   template: `
-    <main class="max-w-md mx-auto">
+    <main class="max-w-4xl mx-auto">
       <div class="flex items-center justify-center gap-3 mb-6 mt-5">
         <img
           src="../assets/logos/digistore_logo.svg"

@@ -35,5 +35,5 @@ security:
 
     - { path: ^/api/v1/message, roles: ROLE_USER }
     - { path: ^/api/v1/messages, roles: ROLE_USER }
-
+    - { path: ^/users/me, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }

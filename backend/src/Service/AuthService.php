@@ -75,6 +75,7 @@ readonly class AuthService {
       'access_token' => $accessToken,
       'refresh_token' => $refreshToken,
       'user' => [
+        'id' => $user->getId(),
         'email' => $user->getEmail(),
         'username' => $user->getUsername(),
         'roles' => $user->getRoles(),
