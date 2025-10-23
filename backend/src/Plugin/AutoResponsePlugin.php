@@ -23,9 +23,9 @@ class AutoResponsePlugin implements PluginInterface {
   public function handle(Message $message, User $user): ?Message {
     $reply = new Message();
     $reply->setUser($user);
-    $reply->setStatus(MessageStatus::SENT);
-    $reply->setContent('Hello! Can I help you?');
-
+    $reply->setStatus(MessageStatus::SENT->value);
+    $reply->setContent('Hi there! 🤖');
+    $reply->setIsBot(true);
     return $reply;
   }
 }

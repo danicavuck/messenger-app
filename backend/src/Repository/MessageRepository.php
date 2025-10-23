@@ -23,7 +23,7 @@ final class MessageRepository extends ServiceEntityRepository {
     $qb = $this->createQueryBuilder('m')
       ->andWhere('m.user = :user')
       ->setParameter('user', $user)
-      ->orderBy('m.createdAt', 'ASC');
+      ->orderBy('m.created_at', 'ASC');
 
     return $this->paginator->paginate($qb, $page, $limit);
   }

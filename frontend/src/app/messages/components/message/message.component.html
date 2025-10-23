@@ -1,0 +1,25 @@
+<div
+  class="message-bubble"
+  [ngClass]="{
+    'message--sent': !message.isBot,
+    'message--bot': message.isBot,
+    'message--pending': isPending,
+    'message--failed': isFailed
+  }"
+>
+  <div class="message-header">
+    <span class="message-user">
+      {{ message.isBot ? '🤖 ChatBot' : 'You' }}
+    </span>
+  </div>
+
+  <div class="message-content">
+    {{ message.content }}
+  </div>
+
+  <div class="message-footer">
+    <span class="message-time">{{ message.created_at | date:'shortTime' }}</span>
+  </div>
+
+  <div *ngIf="isFailed" class="message-status message-status--error">❌ Failed</div>
+</div>

@@ -10,35 +10,6 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "REGISTER",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\":\"user@gmail.com\",\n    \"password\":\"user123456\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_host}}/api/v1/auth/register",
-							"host": [
-								"{{api_host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "LOGIN",
 					"event": [
 						{
@@ -88,6 +59,35 @@
 					"response": []
 				},
 				{
+					"name": "REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"user@gmail.com\",\n    \"password\":\"user123456\",\n    \"username\":\"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/api/v1/auth/register",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "REFRESH TOKEN",
 					"event": [
 						{
@@ -117,13 +117,13 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
+								"value": "Bearer {{access_token}}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"refresh_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NjA4OTMxMTMsImV4cCI6MTc2MzQ4NTExMywicm9sZXMiOlsiUk9MRV9VU0VSIl0sInR5cGUiOiJyZWZyZXNoIiwidXNlcm5hbWUiOiJkZW1vQGV4YW1wbGUuY29tIn0.lpVfX3BN4rLcGG48pidtDXKPLPqMWNF4NUWlBHoaXyQ9g_Y7mlOHatGtDvajEuXncmoOt-kjYnk5Dm0-4pXlhuammjZv_zQAK0LMJ6sAxMcZ4ZJW-16Kh6VEEqHt70fEpSoNUa_Ilcork0-VaAczRpyNnr-6jXYbjo5HANN-a02dMPdVdS-miAjTjQ1R0SK7OaDVjOKzv5dSWwYaFUsOtNTp0QtjNjhoo4WecL-K3SbHyRxO-iSHwIqt6JaGttJiWH1CBsjm6X7yP4Re1toEijPBuahAJgexh0IfrM2jSOjrOPMRx_NUSJELkrRc0_a93pAJHVWCIavMBArPv7VM0kbYb39u3eyix--KZwC5C-55qJum4fv-xxP3WcT7OCUZu8zpkIGTvtXfiTeGyW5YQGL3Li_BNpIKDPW5cyY6xmp6SWKF0xce8BB0zNTFoAraOE9TFbwMfZG3A99g8eWAU1S1aqkDtGzDTe7X1TbcVui_N0cHKN-rRJEVeK01zLiBPj8aCqMTMjXTlKTu0L1h-Q8-mmwtkpH5xRH4utHtJBATL96TAWRfe0Av_q-rEv-Q-pKuyrEx_W71FiXcxDb4WJWw1X0o16zrZJ3LB6rfqgZ3GvSPm-dbLVCyaFac5fbfBq1t2FWMx39MAMsQtiZPaTNBViSyxuUKSLG_3to5cgA\"\n}"
+							"raw": "{\n \"refresh_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NjA4OTY1OTQsImV4cCI6MTc2MzQ4ODU5NCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInR5cGUiOiJyZWZyZXNoIiwiZW1haWwiOiJkZW1vQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJkZW1vdXNlciJ9.k2tts2GY13NVExL-74J065HLeYJBCxNrAiXKXFYYN58XvaLo8TD6iPNMqo7jfsBcF5X_F4Qegeec8pdzrO2XHxLl_Ee4pzADVwlzcEB8ETsNCbDdjqiMY89z16f5fSEBQjSXhoz-ANpZ69LS__eE713wBKU9-B8-1iK_1DqlvzXpA6_cCfsJdYMEySXrDhu2UIvUnvNIWv8gpKSd63sGLvMIG_Y31fBeSNNNpk0bQsiVhHi_DOZhwGgcZcNRRqCLdfShQCW3wPFTWwjze6Ijt7AWGNJS5k2mRxw-WTrwZgGWJE2YGSN7rZkOqipHrYKbOJtHg7zul1Ec8sepGbwLMiCvuaZ2LIwp7w5TMMPq6KovxlpA23khCSJHRcpAHYCr9g1nxhFWiJ3vJb0ghIervfn_hPhKzbKfmk0rxuk9Il5bLtxjvmOd4JAXrIEXmHstu8UuWGIs_5WEwqzff3mChwJw-VhBJg0GTA94TykqdChacy4gHXy2AK201KANRdZlEaau9qiC4WX7_fGo3pt7bpmTfXgfBUbLGIluC4SCzEEgYkWrDJ4Wy6mQyQzLbHir1y0fHWinv0L71Sub2elIcteQCPPBC-VUciuTOItgAP5cwVzZG655CcQS_aSWUhVya8GaRzSaQHzgo5DA34lg009btWYM_K-ZklSY3YUhdV4\"\n}"
 						},
 						"url": {
 							"raw": "{{api_host}}/api/v1/auth/refresh",
@@ -142,6 +142,110 @@
 									"value": "{{access_token}}",
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Message",
+			"item": [
+				{
+					"name": "LIST",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{api_host}}/api/v1/messages",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\":\"hello javascript\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/api/v1/messages",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "GET",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{api_host}}/api/v1/users/me",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me"
 							]
 						}
 					},

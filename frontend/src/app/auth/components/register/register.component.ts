@@ -63,10 +63,8 @@ export class RegisterComponent {
       await this.authService.register({email, username, password});
       this.successMessage.set('Registration successful! Redirecting to login...');
       this.form.reset();
-      setTimeout(() => {
-        this.successMessage.set('');
-        this.router.navigateByUrl('/login');
-      }, 1000);
+      setTimeout(() => this.successMessage.set(''), 2500);
+      await this.router.navigate(['/login']);
     } catch (error) {
       console.error(error);
       this.errorMessage.set('Registration failed. Please try again.');

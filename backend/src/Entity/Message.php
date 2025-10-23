@@ -25,16 +25,32 @@ class Message {
   #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
   private User $user;
 
-  #[ORM\Column(type: 'datetime_immutable')]
-  private \DateTimeImmutable $createdAt;
+  #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
+  private \DateTimeImmutable $created_at;
 
-  #[ORM\Column(type: 'string', length: 100, enumType: MessageStatus::class)]
+  #[ORM\Column(type: 'string', length: 100)]
   #[Assert\NotBlank]
-  private MessageStatus $status;
+  private string $status;
 
-  public function __construct() {
-    $this->createdAt = new \DateTimeImmutable();
-    $this->status = MessageStatus::SENT;
+  #[ORM\Column(type: 'boolean', options: ['default' => false])]
+  private bool $isBot = false;
+
+  public function __construct(
+    ?string $content = null,
+    ?User   $user = null,
+    ?string $status = null
+  ) {
+    $this->created_at = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+    $this->status = $status ?? MessageStatus::SENT->value;
+    $this->isBot = false;
+
+    if ($content !== null) {
+      $this->content = $content;
+    }
+
+    if ($user !== null) {
+      $this->user = $user;
+    }
   }
 
   public function getId(): ?string {
@@ -54,25 +70,35 @@ class Message {
     return $this->user;
   }
 
-  public function setUser(User $u): self {
-    $this->user = $u;
+  public function setUser(User $user): self {
+    $this->user = $user;
     return $this;
   }
 
   public function getCreatedAt(): \DateTimeImmutable {
-    return $this->createdAt;
+    return $this->created_at;
   }
 
-  public function setCreatedAt(\DateTimeImmutable $createdAt): void {
-    $this->createdAt = $createdAt;
+  public function setCreatedAt(\DateTimeImmutable $createdAt): self {
+    $this->created_at = $createdAt;
+    return $this;
   }
 
-  public function getStatus(): MessageStatus {
+  public function getStatus(): string {
     return $this->status;
   }
 
-  public function setStatus(MessageStatus $s): self {
-    $this->status = $s;
+  public function setStatus(string $status): self {
+    $this->status = $status;
+    return $this;
+  }
+
+  public function isBot(): bool {
+    return $this->isBot;
+  }
+
+  public function setIsBot(bool $isBot): self {
+    $this->isBot = $isBot;
     return $this;
   }
 }

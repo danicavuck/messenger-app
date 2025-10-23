@@ -2,7 +2,7 @@ import {Component, inject, signal} from '@angular/core';
 import {FormBuilder, Validators, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {AuthService} from '../../services/auth.service';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +14,7 @@ import {RouterLink} from "@angular/router";
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
@@ -53,6 +54,7 @@ export class LoginComponent {
       this.form.reset();
       this.successMessage.set(`Welcome back, ${res.user.username}!`);
       setTimeout(() => this.successMessage.set(''), 2500);
+      await this.router.navigate(['/chat']);
     } catch (error) {
       console.error(error);
       this.errorMessage.set('Invalid email or password.');

@@ -13,7 +13,7 @@ class ProfanityFilterPlugin implements PluginInterface {
   }
 
   public function getDescription(): string {
-    return 'Removes profanity from the message before saving.';
+    return 'Replaces banned words with the same number of asterisks.';
   }
 
   public function supports(Message $message, User $user): bool {
@@ -28,10 +28,18 @@ class ProfanityFilterPlugin implements PluginInterface {
 
   public function handle(Message $message, User $user): ?Message {
     $cleaned = $message->getContent();
+
     foreach ($this->banned as $word) {
-      $cleaned = preg_replace('/' . preg_quote($word, '/') . '/i', '***', $cleaned);
+      $pattern = '/' . preg_quote($word, '/') . '/i';
+      $cleaned = preg_replace_callback($pattern, function ($matches) {
+        $length = strlen($matches[0]);
+        return str_repeat('*', $length);
+      }, $cleaned);
     }
+
     $message->setContent($cleaned);
+
+    // returning null tells the plugin manager not to create a new message
     return null;
   }
 }

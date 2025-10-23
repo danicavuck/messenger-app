@@ -1,0 +1,27 @@
+{
+  debug
+}
+
+:80 {
+  encode zstd gzip
+
+  # Allow CORS for Angular
+  header Access-Control-Allow-Origin "*"
+  header Access-Control-Allow-Headers "*"
+  header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+  header Access-Control-Allow-Credentials true
+
+  # Relax CSP for Mercure streaming
+  header Content-Security-Policy "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
+
+  # Mercure routes
+  route {
+    mercure {
+      publisher_jwt "aLW1cP91jqTw8wVaWUHKaEo8etTMuA0atM0L5UBSYk0="
+      subscriber_jwt "aLW1cP91jqTw8wVaWUHKaEo8etTMuA0atM0L5UBSYk0="
+      anonymous
+      cors.origins *
+    }
+    respond /health 200
+  }
+}

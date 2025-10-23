@@ -20,13 +20,6 @@ class AppFixtures extends Fixture {
       roles: [Role::USER->value]
     );
 
-    $this->createUserIfNotExists(
-      $om,
-      email: 'admin@example.com',
-      username: 'admin',
-      password: 'admin1234',
-      roles: [Role::ADMIN->value]
-    );
   }
 
   private function createUserIfNotExists(

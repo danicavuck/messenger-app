@@ -11,9 +11,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/users', name: 'user')]
 class UserController extends AbstractController {
-  /**
-   * Return the currently authenticated user
-   */
+
   #[Route('/me', name: 'me', methods: ['GET'])]
   #[IsGranted('IS_AUTHENTICATED_FULLY')]
   public function me(#[CurrentUser] ?User $user): JsonResponse {

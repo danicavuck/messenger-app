@@ -16,6 +16,8 @@ final readonly class MessageService {
     private EntityManagerInterface   $em,
     private MessageRepository        $messages,
     private EventDispatcherInterface $eventDispatcher,
+    private MessageResponseFactory   $response,
+    private MessageRealtimePublisher $publisher,
   ) {}
 
   /**
@@ -24,30 +26,22 @@ final readonly class MessageService {
    * @return array
    */
   public function create(MessageDTO $dto, User $user): array {
+    if ('' === trim($dto->content)) {
+      throw new \InvalidArgumentException('Message content cannot be empty.');
+    }
+
     $message = (new Message())
       ->setUser($user)
       ->setContent($dto->content)
-      ->setStatus(MessageStatus::SENT);
+      ->setStatus(MessageStatus::SENT->value);
 
     $this->em->persist($message);
     $this->em->flush();
+    $this->publisher->publish($message);
 
-    $this->eventDispatcher->dispatch(
-      new MessageCreatedEvent($message, $user),
-      MessageCreatedEvent::NAME
-    );
+    $this->eventDispatcher->dispatch(new MessageCreatedEvent($message, $user), MessageCreatedEvent::NAME);
 
-    return $this->formatResponse($message);
-  }
-
-  private function formatResponse(Message $message): array {
-    return [
-      'id' => $message->getId(),
-      'content' => $message->getContent(),
-      'status' => $message->getStatus()->value,
-      'username' => $message->getUser()->getUsername(),
-      'created_at' => $message->getCreatedAt()->format(\DateTimeInterface::ATOM),
-    ];
+    return $this->response->make($message);
   }
 
   /**
@@ -58,7 +52,7 @@ final readonly class MessageService {
    */
   public function getUserMessages(User $user, int $page = 1, int $limit = 20): array {
     $result = $this->messages->findPaginatedByUser($user, $page, $limit);
-    $items = array_map(fn(Message $m) => $this->formatResponse($m), $result['items']);
+    $items = array_map(fn(Message $m) => $this->response->make($m), $result['items']);
 
     return [
       'data' => $items,

@@ -1,0 +1,46 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h2 class="chat-title">ChatBot</h2>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  @if (_loading$()) {
+    <div class="chat-loading">Loading messages...</div>
+  }
+
+  @if (!_loading$() && _messages$().length === 0) {
+    <div class="chat-empty">
+      No messages yet. Start the conversation!
+    </div>
+  }
+
+  @if (!_loading$() && _hasMessages$()) {
+    <div class="chat-messages">
+      @for (message of _messages$(); track trackByIndex; let i = $index) {
+        <div
+          [ngClass]="{
+        'chat-message': true,
+        'chat-message--sent': message.status === 'sent',
+        'chat-message--received': message.status !== 'sent'
+      }"
+        >
+          <app-message [message]="message" [index]="i + 1"></app-message>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="chat-input">
+    <input
+      type="text"
+      placeholder="Type a message..."
+      [value]="_newMessage$()"
+      (input)="onInputChange($event)"
+      (keydown.enter)="onSend()"
+      class="chat-text-input"
+    />
+    <button (click)="onSend()" [disabled]="!_newMessage$().trim()" class="chat-send-btn">
+      Send
+    </button>
+  </div>
+</div>
