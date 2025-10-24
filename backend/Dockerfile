@@ -32,6 +32,10 @@ FROM base AS dev
 ENV APP_ENV=dev \
     APP_DEBUG=1
 
+ARG LOCAL_USER_UID=1000
+ARG LOCAL_GROUP_GID=1000
+RUN usermod -u ${LOCAL_USER_UID} www-data && groupmod -g ${LOCAL_GROUP_GID} www-data
+
 WORKDIR /var/www/html
 
 # Copy only composer files first (for layer caching)

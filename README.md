@@ -41,6 +41,17 @@ Copy and rename the `.env.dist` file in the backend:
 ```
 You can adjust environment variables (e.g. ports, DB credentials) if needed.
 
+### Generate JWT keys (first time only)
+Run these commands on your host machine:
+
+```bash
+  mkdir -p backend/config/jwt
+  openssl genpkey -algorithm RSA -out backend/config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096
+  openssl pkey -in backend/config/jwt/private.pem -out backend/config/jwt/public.pem -pubout
+  chmod 644 backend/config/jwt/private.pem backend/config/jwt/public.pem
+```
+These keys are used to sign and verify JWT tokens for authentication.
+
 ### 3. Start all services
 ```bash
   docker compose up --build
